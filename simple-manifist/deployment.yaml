@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "simple-chart.fullname" . }}
+  name: nginx-deploy
   labels:
     app: test
   annotations:
     avp.kubernetes.io/path: "kv/data/app1"
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: test
@@ -17,12 +17,12 @@ spec:
         app: test
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: test
           image: nginx
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: 80
               protocol: TCP
           env:
           - name: VAULT_ENV1
