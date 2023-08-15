@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "simple-chart.fullname" . }}
+  namespace: argocd
   labels:
     app: test
   annotations:
