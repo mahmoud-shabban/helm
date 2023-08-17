@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "simple-chart.fullname" . }}
-  namespace: helm
+  name: {? {include "simple-chart.fullname" .: ''} : ''}
+  namespace: argocd
   labels:
     app: test
   annotations:
     avp.kubernetes.io/path: "kv/data/app1"
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {? {.Values.replicaCount: ''} : ''}
   selector:
     matchLabels:
       app: test
@@ -18,16 +18,16 @@ spec:
         app: test
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: nginx
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          env:
-          - name: VAULT_ENV1
-            value: <env1>
-          - name: VAULT_ENV2
-            value: <env2>
-          
+      - name: {? {.Chart.Name: ''} : ''}
+        image: nginx
+        imagePullPolicy: {? {.Values.image.pullPolicy: ''} : ''}
+        ports:
+        - name: http
+          containerPort: {? {.Values.service.port: ''} : ''}
+          protocol: TCP
+        env:
+        - name: VAULT_ENV1
+          value: <env1>
+        - name: VAULT_ENV2
+          value: <env2>
+
